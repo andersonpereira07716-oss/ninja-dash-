@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+  <meta name="theme-color" content="#080B12">
+  <meta name="description" content="Ninja Dash - Corra, desvie e sobreviva.">
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+
+  <title>Ninja Dash</title>
+</head>
+
+<body>
+
+  <main id="app">
+
+    <!-- MENU -->
+    <section id="menuScreen" class="screen active">
+
+      <div class="logo-area">
+        <div class="ninja-logo">🥷</div>
+        <h1>NINJA <span>DASH</span></h1>
+        <p>CORRA. DESVIE. SOBREVIVA.</p>
+      </div>
+
+      <div class="high-score">
+        🏆 RECORDE:
+        <strong id="menuHighScore">0</strong>
+      </div>
+
+      <div class="menu-buttons">
+
+        <button id="playButton" class="game-button primary">
+          ▶ JOGAR
+        </button>
+
+        <button id="charactersButton" class="game-button">
+          🥷 PERSONAGENS
+        </button>
+
+        <button id="shopButton" class="game-button">
+          🛒 LOJA
+        </button>
+
+        <button id="settingsButton" class="game-button">
+          ⚙ CONFIGURAÇÕES
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- GAME -->
+    <section id="gameScreen" class="screen game-screen">
+
+      <div class="game-hud">
+
+        <div>
+          <small>PONTOS</small>
+          <strong id="scoreDisplay">0</strong>
+        </div>
+
+        <div>
+          <small>🪙 MOEDAS</small>
+          <strong id="gameCoinsDisplay">0</strong>
+        </div>
+
+        <div>
+          <small>🏆 RECORDE</small>
+          <strong id="gameHighScore">0</strong>
+        </div>
+
+      </div>
+
+      <button id="pauseButton" class="pause-button">
+        ⏸
+      </button>
+
+      <canvas id="gameCanvas"></canvas>
+
+      <div id="gameMessage" class="game-message">
+        TOQUE PARA PULAR
+      </div>
+
+    </section>
+
+
+    <!-- GAME OVER -->
+    <section id="gameOverScreen" class="screen">
+
+      <div class="result-card">
+
+        <div class="result-icon">💥</div>
+
+        <h2>GAME OVER</h2>
+
+        <div class="result-stat">
+          <span>Pontuação</span>
+          <strong id="finalScore">0</strong>
+        </div>
+
+        <div class="result-stat">
+          <span>Moedas</span>
+          <strong id="finalCoins">0</strong>
+        </div>
+
+        <div id="newRecord" class="new-record hidden">
+          🏆 NOVO RECORDE!
+        </div>
+
+        <button id="restartButton" class="game-button primary">
+          🔄 JOGAR NOVAMENTE
+        </button>
+
+        <button id="gameOverMenuButton" class="game-button">
+          🏠 MENU
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- PERSONAGENS -->
+    <section id="charactersScreen" class="screen">
+
+      <div class="screen-header">
+        <button class="backButton" data-screen="menuScreen">←</button>
+        <h2>PERSONAGENS</h2>
+      </div>
+
+      <div class="coin-balance">
+        🪙 <span id="characterCoins">0</span>
+      </div>
+
+      <div id="charactersList" class="cards-container"></div>
+
+    </section>
+
+
+    <!-- LOJA -->
+    <section id="shopScreen" class="screen">
+
+      <div class="screen-header">
+        <button class="backButton" data-screen="menuScreen">←</button>
+        <h2>LOJA</h2>
+      </div>
+
+      <div class="coin-balance">
+        💰 <span id="shopCoins">0</span>
+      </div>
+
+      <div class="shop-card">
+        <div class="shop-icon">🪙</div>
+        <h3>100 MOEDAS</h3>
+        <p>Pacote demonstrativo</p>
+        <button class="game-button shop-demo" data-coins="100">
+          ADQUIRIR
+        </button>
+      </div>
+
+      <div class="shop-card">
+        <div class="shop-icon">💰</div>
+        <h3>500 MOEDAS</h3>
+        <p>Pacote demonstrativo</p>
+        <button class="game-button shop-demo" data-coins="500">
+          ADQUIRIR
+        </button>
+      </div>
+
+      <div class="shop-card">
+        <div class="shop-icon">💎</div>
+        <h3>1000 MOEDAS</h3>
+        <p>Pacote demonstrativo</p>
+        <button class="game-button shop-demo" data-coins="1000">
+          ADQUIRIR
+        </button>
+      </div>
+
+      <p class="shop-warning">
+        Os itens são demonstrativos nesta versão.
+      </p>
+
+    </section>
+
+
+    <!-- CONFIGURAÇÕES -->
+    <section id="settingsScreen" class="screen">
+
+      <div class="screen-header">
+        <button class="backButton" data-screen="menuScreen">←</button>
+        <h2>CONFIGURAÇÕES</h2>
+      </div>
+
+      <div class="settings-list">
+
+        <div class="setting-row">
+          <span>🔊 SOM</span>
+          <button id="soundToggle" class="toggle-button">
+            ON
+          </button>
+        </div>
+
+        <div class="setting-row">
+          <span>📳 VIBRAÇÃO</span>
+          <button id="vibrationToggle" class="toggle-button">
+            ON
+          </button>
+        </div>
+
+        <button id="resetButton" class="danger-button">
+          🗑 RESETAR PROGRESSO
+        </button>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
+
+</body>
+</html>

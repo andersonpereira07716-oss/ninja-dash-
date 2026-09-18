@@ -1,0 +1,44 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.ninjadash.game"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="23"
+9        android:targetSdkVersion="35" />
+10
+11    <application
+11-->/data/data/com.termux/files/home/ninja-dash/android/app/src/main/AndroidManifest.xml:3:5-21:19
+12        android:debuggable="true"
+13        android:extractNativeLibs="false"
+14        android:hardwareAccelerated="true"
+14-->/data/data/com.termux/files/home/ninja-dash/android/app/src/main/AndroidManifest.xml:7:9-43
+15        android:label="Ninja Dash"
+15-->/data/data/com.termux/files/home/ninja-dash/android/app/src/main/AndroidManifest.xml:5:9-35
+16        android:theme="@style/AppTheme"
+16-->/data/data/com.termux/files/home/ninja-dash/android/app/src/main/AndroidManifest.xml:4:9-40
+17        android:usesCleartextTraffic="true" >
+17-->/data/data/com.termux/files/home/ninja-dash/android/app/src/main/AndroidManifest.xml:6:9-44
+18        <activity
+18-->/data/data/com.termux/files/home/ninja-dash/android/app/src/main/AndroidManifest.xml:9:9-19:20
+19            android:name="com.ninjadash.game.MainActivity"
+19-->/data/data/com.termux/files/home/ninja-dash/android/app/src/main/AndroidManifest.xml:10:13-41
+20            android:exported="true"
+20-->/data/data/com.termux/files/home/ninja-dash/android/app/src/main/AndroidManifest.xml:12:13-36
+21            android:screenOrientation="portrait" >
+21-->/data/data/com.termux/files/home/ninja-dash/android/app/src/main/AndroidManifest.xml:11:13-49
+22            <intent-filter>
+22-->/data/data/com.termux/files/home/ninja-dash/android/app/src/main/AndroidManifest.xml:14:13-17:29
+23                <action android:name="android.intent.action.MAIN" />
+23-->/data/data/com.termux/files/home/ninja-dash/android/app/src/main/AndroidManifest.xml:15:17-69
+23-->/data/data/com.termux/files/home/ninja-dash/android/app/src/main/AndroidManifest.xml:15:25-66
+24
+25                <category android:name="android.intent.category.LAUNCHER" />
+25-->/data/data/com.termux/files/home/ninja-dash/android/app/src/main/AndroidManifest.xml:16:17-77
+25-->/data/data/com.termux/files/home/ninja-dash/android/app/src/main/AndroidManifest.xml:16:27-74
+26            </intent-filter>
+27        </activity>
+28    </application>
+29
+30</manifest>
