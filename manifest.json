@@ -1,23 +1,37 @@
 {
   "name": "Ninja Dash",
   "short_name": "Ninja Dash",
-  "description": "Corra, desvie e sobreviva no Ninja Dash.",
-  "start_url": "./index.html",
+  "description": "Corra, desvie dos obstáculos e sobreviva no Ninja Dash.",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone"
+  ],
   "orientation": "portrait",
   "background_color": "#080B12",
   "theme_color": "#080B12",
   "lang": "pt-BR",
+  "dir": "ltr",
+  "categories": [
+    "games",
+    "entertainment"
+  ],
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "assets/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "assets/icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
