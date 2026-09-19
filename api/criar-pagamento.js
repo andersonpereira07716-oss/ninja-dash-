@@ -1,7 +1,7 @@
 import { MercadoPagoConfig, Payment } from 'mercadopago';
 
 const PACOTES = {
-  '100_moedas':  { moedas: 100,  valor: 9.90,  descricao: '100 Moedas - Ninja Dash' },
+  '100_moedas':  { moedas: 100,  valor: 1.00,  descricao: '100 Moedas - Ninja Dash' },
   '500_moedas':  { moedas: 500,  valor: 39.90, descricao: '500 Moedas - Ninja Dash' },
   '1000_moedas': { moedas: 1000, valor: 69.90, descricao: '1000 Moedas - Ninja Dash' },
 };
