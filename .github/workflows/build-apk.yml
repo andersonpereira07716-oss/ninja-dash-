@@ -35,6 +35,10 @@ jobs:
         with:
           gradle-version: '8.9'
 
+      - name: Gerar Gradle Wrapper
+        working-directory: android
+        run: gradle wrapper
+
       - name: Compilar Ninja Dash
         working-directory: android
         run: ./gradlew assembleDebug --no-daemon
