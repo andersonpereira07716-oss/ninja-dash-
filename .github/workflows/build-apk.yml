@@ -21,22 +21,23 @@ jobs:
           java-version: '17'
 
       - name: Configurar Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
 
       - name: Instalar SDK Android
         run: |
+          yes | sdkmanager --licenses || true
           sdkmanager "platform-tools"
           sdkmanager "platforms;android-35"
           sdkmanager "build-tools;35.0.0"
 
-      - name: Instalar Gradle
+      - name: Configurar Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
 
       - name: Compilar Ninja Dash
         working-directory: android
-        run: gradle assembleDebug --no-daemon
+        run: ./gradlew assembleDebug --no-daemon
 
       - name: Disponibilizar APK
         uses: actions/upload-artifact@v4
