@@ -829,29 +829,52 @@ function buyCharacter(id) {
 // SHOP
 // ==========================================
 
-const PACOTES_MOEDAS = {
-  100: '100_moedas',
-  500: '500_moedas',
-  1000: '1000_moedas',
-};
+// ==========================================
+// SHOP - PREÇO ÚNICO E ANÚNCIOS RECOMPENSADOS
+// ==========================================
 
-function getDispositivoId() {
-  let id = localStorage.getItem('ninjaDashDispositivoId');
-  if (!id) {
-    id = 'dev_' + Date.now() + '_' + Math.random().toString(36).slice(2);
-    localStorage.setItem('ninjaDashDispositivoId', id);
-  }
-  return id;
+const VALOR_JOGO_COMPLETO = 10.00;
+
+// Função para comprar o acesso completo ao jogo por R$ 10,00
+function comprarJogoCompleto() {
+    // Insira aqui o seu link de pagamento real do Mercado Pago de 10 reais
+    const linkPagamento10 = "https://mpago.la/SEU_LINK_REAL_10"; 
+    
+    // Redireciona o utilizador para o checkout
+    window.location.href = linkPagamento10;
 }
 
-function buyDemoCoins(amount) {
-  const pacote = PACOTES_MOEDAS[amount];
-  if (!pacote) {
-    alert('Pacote inválido.');
-    return;
-  }
-  iniciarPagamentoPix(pacote, amount);
+// Sistema de anúncios para reviver ou ganhar recompensas
+function assistirAnuncioBonus(tipoRecompensa) {
+    console.log("A carregar anúncio em vídeo...");
+    
+    // Simulação do tempo de exibição do anúncio (ex: 3 segundos)
+    setTimeout(() => {
+        alert("Anúncio concluído com sucesso!");
+        
+        if (tipoRecompensa === 'reviver') {
+            // Lógica para o jogador continuar a partida de onde parou
+            if (typeof reviverJogador === 'function') {
+                reviverJogador();
+            } else {
+                console.log("Jogador revivido!");
+            }
+        } else if (tipoRecompensa === 'moedas') {
+            // Recompensa extra de itens/moedas
+            ganharRecompensaExtra();
+        }
+    }, 3000);
 }
+
+function ganharRecompensaExtra() {
+    // Adiciona bónus ao jogador por ver o anúncio
+    if (typeof player !== 'undefined') {
+        player.coins = (player.coins || 0) + 15;
+    }
+    alert("Ganhou +15 moedas de bónus!");
+}
+
+  
 
 async function iniciarPagamentoPix(pacote, amount) {
   mostrarModalPix('Gerando pagamento PIX...', null, null);
