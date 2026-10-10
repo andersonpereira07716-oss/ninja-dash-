@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Ninja Dash</title>
+  <link rel="stylesheet" href="style.css?v=6">
+</head>
+<body>
+  <div id="app-container">
+    <header class="top-bar">
+      <div class="stat-badge">🪙 <span id="user-coins">50</span></div>
+      <div class="stat-badge">🏆 Recorde: <span id="user-highscore">350</span></div>
+    </header>
+
+    <!-- MENU PRINCIPAL -->
+    <section id="screen-menu" class="screen active">
+      <div class="logo-container">
+        <h1>🥷 NINJA DASH</h1>
+        <p class="subtitle">CORRA. DESVIE. SOBREVEIVA.</p>
+      </div>
+      <div class="menu-actions">
+        <button class="btn" onclick="iniciarJogo()">▶ JOGAR</button>
+        <button class="btn btn-secondary" onclick="mudarTela('screen-characters')">🥷 PERSONAGENS</button>
+        <button class="btn btn-secondary" onclick="mudarTela('screen-shop')">🛒 LOJA DE MOEDAS</button>
+      </div>
+    </section>
+
+    <!-- TELA DE JOGO (CANVAS) -->
+    <section id="screen-game" class="screen">
+      <div class="game-hud">
+        <span>⚡ Distância: <b id="game-score">0</b>m</span>
+        <span>🪙 Moedas: <b id="game-session-coins">0</b></span>
+      </div>
+      <div class="canvas-wrapper">
+        <canvas id="gameCanvas"></canvas>
+      </div>
+      <p class="touch-hint">👆 Toque na tela para Pular</p>
+      <button class="btn btn-secondary" style="margin-top: 6px; padding: 10px; z-index: 20;" onclick="mudarTela('screen-menu'); pararJogo();">🏠 SAIR</button>
+    </section>
+
+    <!-- TELA DE GAME OVER -->
+    <section id="screen-gameover" class="screen">
+      <h2 style="color: #ef4444; font-size: 28px;">💥 FIM DE JOGO</h2>
+      <div class="results-card" style="margin: 20px 0; background: #1f2937; padding: 20px; border-radius: 16px; width: 100%; border: 1px solid #374151;">
+        <p style="font-size: 14px; color: #9ca3af;">Distância Percorrida</p>
+        <p><b id="final-score" style="color: #f8fafc; font-size: 28px;">0</b>m</p>
+        <p style="font-size: 14px; color: #9ca3af; margin-top: 10px;">Moedas Coletadas: <b id="final-coins" style="color: #fbbf24; font-size: 18px;">0</b></p>
+      </div>
+      <button class="btn" onclick="iniciarJogo()">🔄 JOGAR NOVAMENTE</button>
+      <button class="btn btn-secondary" onclick="mudarTela('screen-menu')" style="margin-top: 10px;">🏠 MENU PRINCIPAL</button>
+    </section>
+
+    <!-- TELA DE PERSONAGENS -->
+    <section id="screen-characters" class="screen">
+      <h2>🥷 PERSONAGENS</h2>
+      <div class="shop-list" style="margin-top: 15px;">
+        <div class="shop-card">
+          <div class="shop-info"><h3>Ninja Clássico</h3><p>Ativo no Jogo</p></div>
+          <button class="btn-buy" style="background: #3b82f6;">USANDO</button>
+        </div>
+        <div class="shop-card">
+          <div class="shop-info"><h3>Ninja Sombra</h3><p>Custo: 200 Moedas</p></div>
+          <button class="btn-buy" onclick="alert('Funcionalidade de desbloqueio em desenvolvimento!')">DESBLOQUEAR</button>
+        </div>
+      </div>
+      <button class="btn btn-secondary" onclick="mudarTela('screen-menu')" style="margin-top: 20px;">⬅ VOLTAR</button>
+    </section>
+
+    <!-- TELA DA LOJA DE MOEDAS -->
+    <section id="screen-shop" class="screen">
+      <h2>🛒 LOJA DE MOEDAS</h2>
+      <div class="shop-list" style="margin-top: 15px;">
+        <div class="shop-card">
+          <div class="shop-info"><h3>💰 100 MOEDAS</h3><p>R$ 9,90 (Pix)</p></div>
+          <button class="btn-buy" onclick="alert('Gerando Pix de R$ 9,90...')">ADQUIRIR</button>
+        </div>
+        <div class="shop-card">
+          <div class="shop-info"><h3>💰 500 MOEDAS</h3><p>R$ 39,90 (Pix)</p></div>
+          <button class="btn-buy" onclick="alert('Gerando Pix de R$ 39,90...')">ADQUIRIR</button>
+        </div>
+      </div>
+      <button class="btn btn-secondary" onclick="mudarTela('screen-menu')" style="margin-top: 20px;">⬅ VOLTAR</button>
+    </section>
+  </div>
+
+  <script>
+    function mudarTela(idTela) {
+      document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+      const alvo = document.getElementById(idTela);
+      if (alvo) alvo.classList.add('active');
+    }
+
+    // --- MOTOR DO JOGO ---
+    let canvas, ctx, gameInterval;
+    let score = 0, sessionCoins = 0, isPlaying = false, gameSpeed = 5;
+    let player = { x: 50, y: 200, w: 32, h: 40, vy: 0, gravity: 0.7, jumpPower: -12, grounded: true, jumpsLeft: 2 };
+    let obstacles = [], coinsList = [], backgroundParticles = [];
+
+    function iniciarJogo() {
+      mudarTela('screen-game');
+      canvas = document.getElementById('gameCanvas');
+      ctx = canvas.getContext('2d');
+      
+      canvas.width = canvas.parentElement.clientWidth || 350;
+      canvas.height = canvas.parentElement.clientHeight || 300;
+
+      score = 0;
+      sessionCoins = 0;
+      gameSpeed = 5;
+      player.y = canvas.height - 50 - player.h;
+      player.vy = 0;
+      obstacles = [];
+      coinsList = [];
+      backgroundParticles = [];
+      
+      for(let i=0; i<25; i++) {
+        backgroundParticles.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, size: Math.random()*2+1, speed: Math.random()*2+1});
+      }
+
+      isPlaying = true;
+
+      // Evento de toque otimizado e seguro
+      const lidarComPulo = (e) => {
+        if(e) e.preventDefault();
+        if (player.grounded) {
+          player.vy = player.jumpPower;
+          player.grounded = false;
+          player.jumpsLeft = 1;
+          if(navigator.vibrate) navigator.vibrate(30);
+        } else if (player.jumpsLeft > 0) {
+          player.vy = player.jumpPower * 0.85;
+          player.jumpsLeft--;
+          if(navigator.vibrate) navigator.vibrate(40);
+        }
+      };
+
+      canvas.onpointerdown = lidarComPulo;
+
+      if(gameInterval) clearInterval(gameInterval);
+      gameInterval = setInterval(atualizarLoopJogo, 1000 / 60);
+    }
+
+    function pararJogo() {
+      isPlaying = false;
+      if(gameInterval) clearInterval(gameInterval);
+    }
+
+    function atualizarLoopJogo() {
+      if(!isPlaying) return;
+
+      gameSpeed += 0.002;
+      player.vy += player.gravity;
+      player.y += player.vy;
+      let solo = canvas.height - 50;
+      
+      if (player.y + player.h >= solo) {
+        player.y = solo - player.h;
+        player.vy = 0;
+        player.grounded = true;
+        player.jumpsLeft = 2;
+      }
+
+      if (Math.random() < 0.02 && (obstacles.length === 0 || canvas.width - obstacles[obstacles.length-1].x > 160)) {
+        obstacles.push({ x: canvas.width, y: solo - 35, w: 26, h: 35 });
+      }
+      
+      if (Math.random() < 0.025) {
+        coinsList.push({ x: canvas.width, y: solo - 80 - Math.random()*60, size: 12 });
+      }
+
+      for (let i = obstacles.length - 1; i >= 0; i--) {
+        obstacles[i].x -= gameSpeed;
+        
+        if (
+          player.x + 4 < obstacles[i].x + obstacles[i].w - 4 &&
+          player.x + player.w - 4 > obstacles[i].x + 4 &&
+          player.y + 4 < obstacles[i].y + obstacles[i].h - 4 &&
+          player.y + player.h > obstacles[i].y + 4
+        ) {
+          pararJogo();
+          if(navigator.vibrate) navigator.vibrate([100, 50, 100]);
+          document.getElementById('final-score').innerText = Math.floor(score / 10);
+          document.getElementById('final-coins').innerText = sessionCoins;
+          mudarTela('screen-gameover');
+          return;
+        }
+        if (obstacles[i].x < -50) obstacles.splice(i, 1);
+      }
+
+      for (let i = coinsList.length - 1; i >= 0; i--) {
+        coinsList[i].x -= gameSpeed;
+        let dist = Math.hypot((player.x + player.w/2) - coinsList[i].x, (player.y + player.h/2) - coinsList[i].y);
+        if (dist < 22) {
+          sessionCoins++;
+          document.getElementById('game-session-coins').innerText = sessionCoins;
+          coinsList.splice(i, 1);
+        } else if (coinsList[i].x < -50) {
+          coinsList.splice(i, 1);
+        }
+      }
+
+      score++;
+      document.getElementById('game-score').innerText = Math.floor(score / 10);
+
+      // Render
+      ctx.fillStyle = '#090d16';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+      backgroundParticles.forEach(p => {
+        p.x -= p.speed;
+        if(p.x < 0) p.x = canvas.width;
+        ctx.fillRect(p.x, p.y, p.size, p.size);
+      });
+
+      ctx.fillStyle = '#1e293b';
+      ctx.fillRect(0, solo, canvas.width, 50);
+      ctx.strokeStyle = '#ef4444';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, solo);
+      ctx.lineTo(canvas.width, solo);
+      ctx.stroke();
+
+      // Jogador
+      ctx.fillStyle = '#ef4444';
+      ctx.fillRect(player.x, player.y, player.w, player.h);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(player.x + 6, player.y + 8, 12, 6);
+
+      // Obstáculos
+      ctx.fillStyle = '#64748b';
+      obstacles.forEach(obs => {
+        ctx.fillRect(obs.x, obs.y, obs.w, obs.h);
+      });
+
+      // Moedas
+      coinsList.forEach(c => {
+        ctx.fillStyle = '#fbbf24';
+        ctx.beginPath();
+        ctx.arc(c.x, c.y, c.size, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+  </script>
+</body>
+</html>
